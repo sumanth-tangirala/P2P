@@ -2,10 +2,10 @@
 from pydash.objects import get as _get
 
 # Classes
-from src.Metadata import Metadata
+from Metadata import Metadata
 
 # Helpers
-from src.helpers.piece import getPieceHash
+from helpers.piece import getPieceHash
 
 class Downloader:
 	def __init__(self, metadata: Metadata, downloadDirectoryPath):

@@ -1,8 +1,8 @@
 import os
 
 # Helpers
-from src.helpers.file import getFileNameFromPath, getTransferSize
-from src.helpers.piece import getPieceHash, getPieceDetails
+from helpers.file import getFileNameFromPath, getTransferSize
+from helpers.piece import getPieceHash, getPieceDetails
 
 
 class Metadata:

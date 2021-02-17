@@ -1,9 +1,11 @@
-from src.Metadata import Metadata
-from src.Seeder import Seeder
-from src.Downloader import Downloader
+from Metadata import Metadata
+from Seeder import Seeder
+from Downloader import Downloader
 
-INPUT_TRANSFER_PATH = '../TrialFiles/inputTrial/SWTM-2088_Atlassian-Git-Cheatsheet.pdf'
-OUTPUT_TRANSFER_PATH = '../TrialFiles/outputTrial'
+PROJECT_PATH = '/Users/tangiralasumanth/All Stuff/Programming Stuff/P2P'
+
+INPUT_TRANSFER_PATH = '{}/TrialFiles/inputTrial/SWTM-2088_Atlassian-Git-Cheatsheet.pdf'.format(PROJECT_PATH)
+OUTPUT_TRANSFER_PATH = '{}/TrialFiles/outputTrial'.format(PROJECT_PATH)
 
 if __name__ == "__main__":
 	metadata = Metadata(INPUT_TRANSFER_PATH)
