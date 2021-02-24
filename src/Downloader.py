@@ -21,9 +21,9 @@ class Downloader:
 		receivedPieceHash = getPieceHash(receivedPiece)
 		expectedPieceHash = _get(self, ['metadata', 'pieceHashes', index])
 		
-		if receivedPieceHash is expectedPieceHash:
+		if receivedPieceHash != expectedPieceHash:
 			raise ValueError('Hash mismatch')
-		
+
 		self.outputFile.write(receivedPiece)
 		
 	def closeFile(self):

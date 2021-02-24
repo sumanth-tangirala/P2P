@@ -11,6 +11,7 @@ if __name__ == "__main__":
 	metadata = Metadata(INPUT_TRANSFER_PATH)
 	seeder = Seeder(INPUT_TRANSFER_PATH)
 	downloader = Downloader(metadata=metadata, downloadDirectoryPath=OUTPUT_TRANSFER_PATH)
+	metadata.populatePieceDetails(INPUT_TRANSFER_PATH)
 	
 	# TODO: Simulation
 	pieceSize = metadata.pieceSize
