@@ -1,24 +1,24 @@
 from pathlib import Path
 
-# Classes
-from Classes.Metadata.Metadata import Metadata
+# PyDash
+from pydash.objects import get
 
 # Helpers
-from helpers.file import getFilePathString, getSortedDescendantFilePathStrings
+from Classes.Seeder.SeederHelpers import getInitialPieceBitmap, getPieceFromFileByteIndices
 
 
 # TODO: Remove path and make it either download or source path
-# TODO: Handle partial fetch state later
+# TODO: Make it read json metadata rather than actual metadata
 class Seeder:
-    def __init__(self, metadata: Metadata, path: str, isFirstSeeder: bool):
-        self.pieceVsFetchState = [True] * metadata.numberOfPieces if isFirstSeeder else []  # Write function to check status
-        self.metadata = metadata
-        self.path = Path(path)
-        filePathsToTransfer = (
-            getFilePathString(self.path)) if self.path.is_file() else getSortedDescendantFilePathStrings(self.path)
+    def __init__(self, metadata, sourcePath: Path, fileIdVsFilePath: dict):
+        self._pieceBitmap = getInitialPieceBitmap(metadata, sourcePath, fileIdVsFilePath)
+        self._metadata = metadata
+        self._sourcePath = sourcePath
+        self._fileIdVsFilePath = fileIdVsFilePath
     
-    def getOutput(self, pieceSize: int):
-        return self.inputFile.read(pieceSize)
-    
-    def closeFile(self):
-        self.inputFile.close()
+    def getPiece(self, pieceIndex: int):
+        if not self._pieceBitmap[pieceIndex]:
+            # TODO: Handle this situation
+            return None
+        pieceFileIndices = get(self._metadata, ['pieceDetailsList', pieceIndex, 'pieceFileByteIndicesList'])
+        return getPieceFromFileByteIndices(pieceFileIndices, self._sourcePath, self._fileIdVsFilePath)

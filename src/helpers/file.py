@@ -1,43 +1,35 @@
 from pathlib import Path
 
-from functools import reduce
+from pydash.collections import reduce_
 import bisect
 
-
-def getChildFilePath(parentPath: str, childName: str):
-    return '{}/{}'.format(parentPath, childName)
-
-
-def getFileSize(path: Path):
-    fileStats = path.stat()
-    return fileStats.st_size
-
-
 def getTransferSize(transferPath: Path):
-    if transferPath.is_file():
-        return getFileSize(transferPath)
-    
     if transferPath.is_dir():
-        return reduce(lambda totalSize, child: totalSize + getTransferSize(child), transferPath.iterdir(), 0)
-    
-    return 0
-
-
-def getFilePathString(path: Path):
-    return str(path.absolute())
-
+        return reduce_(transferPath.iterdir(), lambda totalSize, child: totalSize + getTransferSize(child), 0)
+    else:
+        return transferPath.stat().st_size
 
 # Follows DFS and insertion sort
 def getSortedDescendantFilePathStrings(parentPath: Path):
     descendantPathList = list()
     directoryChildren = list()
     
-    for child in parentPath.iterdir():
+    pathsToCheck = [parentPath] if parentPath.is_file() else parentPath.iterdir()
+    
+    for child in pathsToCheck:
         if child.is_dir():
             bisect.insort_right(directoryChildren, child)
         else:
-            bisect.insort_right(descendantPathList, getFilePathString(child))
+            bisect.insort_right(descendantPathList, str(child.absolute()))
     
     for directoryChild in directoryChildren:
         descendantPathList.extend(getSortedDescendantFilePathStrings(directoryChild))
     return tuple(descendantPathList)
+
+# TODO: Make a better id function
+def getFilePathToFileIdMapping(filePaths: tuple):
+    filePathToFileIdMapping = dict()
+    for fileIndex in range(len(filePaths)):
+        filePath = filePaths[fileIndex]
+        filePathToFileIdMapping[filePath] = fileIndex
+    return filePathToFileIdMapping
